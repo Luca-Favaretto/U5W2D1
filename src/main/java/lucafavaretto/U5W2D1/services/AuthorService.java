@@ -29,6 +29,7 @@ public class AuthorService {
     public Author addAuthor(Author newAuthor) {
         Random rndm = new Random();
         newAuthor.setId(rndm.nextInt(1, 10000));
+        newAuthor.setAvatar("https://ui-avatars.com/api/?name=" + newAuthor.getName() + "+" + newAuthor.getSurname());
         authors.add(newAuthor);
 
         return newAuthor;
@@ -43,7 +44,7 @@ public class AuthorService {
                     currentAuthor.setSurname(updatePost.getSurname());
                     currentAuthor.setMail(updatePost.getMail());
                     currentAuthor.setBirthdayDate(updatePost.getBirthdayDate());
-                    currentAuthor.setAvatar(updatePost.getAvatar());
+                    currentAuthor.setAvatar("https://ui-avatars.com/api/?name=" + updatePost.getName() + "+" + updatePost.getSurname());
                     return currentAuthor;
                 })
                 .orElseThrow(() -> new NotFoundElement(id));

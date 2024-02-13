@@ -9,6 +9,7 @@ import java.util.Random;
 @NoArgsConstructor
 @Setter
 @ToString
+@AllArgsConstructor
 public class Author {
     private long id;
     private String name;
@@ -16,14 +17,5 @@ public class Author {
     private String mail;
     private LocalDate birthdayDate;
     private String avatar;
-
-    public Author(String name, String surname, String mail, LocalDate birthdayDate) {
-        Random rndm = new Random();
-        this.id = rndm.nextInt(0, 10000);
-        this.name = name;
-        this.surname = surname;
-        this.mail = mail;
-        this.birthdayDate = birthdayDate;
-        this.avatar = "https://ui-avatars.com/api/?name=" + name + "+" + surname;
-    }
+    
 }
