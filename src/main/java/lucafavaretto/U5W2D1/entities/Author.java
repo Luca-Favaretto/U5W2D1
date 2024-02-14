@@ -1,9 +1,11 @@
 package lucafavaretto.U5W2D1.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -26,6 +28,9 @@ public class Author {
     private String email;
     private LocalDate birthdayDate;
     private String avatar;
+    @JsonIgnore
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<BlogPost> blogPosts;
 
 
     public Author(String name, String surname, String email, LocalDate birthdayDate, String avatar) {

@@ -1,4 +1,4 @@
-package lucafavaretto.U5W2D1.exeptions;
+package lucafavaretto.U5W2D1.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

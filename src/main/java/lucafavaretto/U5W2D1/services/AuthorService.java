@@ -2,8 +2,8 @@ package lucafavaretto.U5W2D1.services;
 
 import lucafavaretto.U5W2D1.entities.Author;
 
-import lucafavaretto.U5W2D1.exeptions.BadRequestException;
-import lucafavaretto.U5W2D1.exeptions.NotFoundException;
+import lucafavaretto.U5W2D1.exceptions.BadRequestException;
+import lucafavaretto.U5W2D1.exceptions.NotFoundException;
 import lucafavaretto.U5W2D1.repositories.AuthorsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

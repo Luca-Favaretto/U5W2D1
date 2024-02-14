@@ -3,8 +3,7 @@ package lucafavaretto.U5W2D1.services;
 import lucafavaretto.U5W2D1.Genre;
 import lucafavaretto.U5W2D1.entities.Author;
 import lucafavaretto.U5W2D1.entities.BlogPost;
-import lucafavaretto.U5W2D1.exeptions.BadRequestException;
-import lucafavaretto.U5W2D1.exeptions.NotFoundException;
+import lucafavaretto.U5W2D1.exceptions.NotFoundException;
 import lucafavaretto.U5W2D1.payloads.BlogPostPayload;
 import lucafavaretto.U5W2D1.repositories.AuthorsDao;
 import lucafavaretto.U5W2D1.repositories.BlogPostDao;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -42,10 +39,10 @@ public class BlogPostService {
     }
 
     public BlogPost save(BlogPostPayload payload) {
-        if (!authorsDao.existsById(payload.getAuthorId())) throw new BadRequestException("Author don't exist");
         Author author = authorService.findById(payload.getAuthorId());
         return blogPostDao.save(
-                new BlogPost(Genre.valueOf(String.valueOf(payload.getGenre())), payload.getTitle(), "https://picsum.photos/200/300", payload.getDetails(), payload.getTimeOfLecture(), author));
+                new BlogPost(Genre.valueOf(String.valueOf(payload.getGenre())), payload.getTitle(),
+                        "https://picsum.photos/200/300", payload.getDetails(), payload.getTimeOfLecture(), author));
     }
 
     public BlogPost findByIdAndUpdate(UUID id, BlogPost updateBlogPost) {
