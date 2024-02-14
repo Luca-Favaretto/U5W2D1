@@ -20,8 +20,8 @@ public class BlogPostController {
     BlogPostService blogPostService;
 
     @GetMapping
-    public Page<BlogPost> getBlogPost() {
-        return blogPostService.getBlogPost();
+    public Page<BlogPost> getBlogPost(int pageNumber, int pageSize, String orderBy) {
+        return blogPostService.getBlogPost(pageNumber, pageSize, orderBy);
     }
 
 
