@@ -23,20 +23,19 @@ public class BlogPostController {
         return blogPostService.getBlogPost();
     }
 
-
+//
 //    @GetMapping("/{id}")
 //    public BlogPost findBlogPostById(@PathVariable long id) {
 //        return blogPostService.findBlogPostById(id);
 //    }
-//
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BlogPost saveBlogPost(@RequestBody BlogPostPayload newBlogPost) {
         return blogPostService.save(newBlogPost);
     }
-//
-//
+
 //    @PutMapping("/{id}")
 //    public BlogPost findBlogPostByIdAndUpdate(@PathVariable long id, @RequestBody BlogPost newBlogPost) {
 //        return blogPostService.findBlogPostByIdAndUpdate(id, newBlogPost);

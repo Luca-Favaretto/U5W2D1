@@ -13,7 +13,7 @@ import java.util.UUID;
 public class BlogPostPayload {
     private Genre genre;
     private String title;
-    private String detail;
+    private String details;
     private int timeOfLecture;
     private UUID authorId;
 }
