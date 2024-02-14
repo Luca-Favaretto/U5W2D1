@@ -20,7 +20,9 @@ public class BlogPostController {
     BlogPostService blogPostService;
 
     @GetMapping
-    public Page<BlogPost> getBlogPost(int pageNumber, int pageSize, String orderBy) {
+    public Page<BlogPost> getBlogPost(@RequestParam(defaultValue = "0") int pageNumber,
+                                      @RequestParam(defaultValue = "10") int pageSize,
+                                      @RequestParam(defaultValue = "title") String orderBy) {
         return blogPostService.getBlogPost(pageNumber, pageSize, orderBy);
     }
 
