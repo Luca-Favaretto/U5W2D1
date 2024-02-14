@@ -1,15 +1,33 @@
 package lucafavaretto.U5W2D1.services;
 
+import lucafavaretto.U5W2D1.Genre;
+import lucafavaretto.U5W2D1.entities.Author;
+import lucafavaretto.U5W2D1.entities.BlogPost;
+import lucafavaretto.U5W2D1.payloads.BlogPostPayload;
+import lucafavaretto.U5W2D1.repositories.BlogPostDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
+import java.util.Set;
 
 @Service
 public class BlogPostService {
-//    Set<BlogPost> blogPosts = new HashSet<>();
-//
-//    public Set<BlogPost> getBlogPost() {
-//        return blogPosts;
-//    }
-//
+
+    @Autowired
+    BlogPostDao blogPostDao;
+    @Autowired
+    AuthorService authorService;
+
+    public Page<BlogPost> getBlogPost() {
+        Pageable pageable = PageRequest.of(0, 10);
+        return blogPostDao.findAll(pageable);
+    }
+
+    //
 //    public BlogPost findBlogPostById(long id) {
 //        return blogPosts.stream()
 //                .filter(el -> el.getId() == id)
@@ -17,16 +35,11 @@ public class BlogPostService {
 //                .orElseThrow(() -> new NotFoundExceptions(id));
 //    }
 //
-//    public BlogPost addBlogPost(BlogPost newBlogPost) {
-//        Random rndm = new Random();
-//        newBlogPost.setId(rndm.nextInt(1, 10000));
-//        newBlogPost.setTimeOfLecture(rndm.nextInt(10, 30));
-//        newBlogPost.setCover("https://picsum.photos/200/300");
-//
-//
-//        blogPosts.add(newBlogPost);
-//        return newBlogPost;
-//    }
+    public BlogPost save(BlogPostPayload payload) {
+        Author author = authorService.findById(payload.getAuthorId());
+        return blogPostDao.save(
+                new BlogPost(Genre.COMPUTER, payload.getTitle(), "https://picsum.photos/200/300", payload.getDetail(), payload.getTimeOfLecture(), author));
+    }
 //
 //    public BlogPost findBlogPostByIdAndUpdate(long id, BlogPost updatePost) {
 //        return blogPosts.stream()

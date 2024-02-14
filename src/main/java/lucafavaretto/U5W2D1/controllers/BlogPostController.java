@@ -1,8 +1,10 @@
 package lucafavaretto.U5W2D1.controllers;
 
 import lucafavaretto.U5W2D1.entities.BlogPost;
+import lucafavaretto.U5W2D1.payloads.BlogPostPayload;
 import lucafavaretto.U5W2D1.services.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,27 +15,26 @@ import java.util.Set;
 @RestController
 @RequestMapping("/blogPosts")
 public class BlogPostController {
-//    @Autowired
-//    BlogPostService blogPostService;
-//
-//
-//    @GetMapping
-//    public Set<BlogPost> getBlogPost() {
-//        return blogPostService.getBlogPost();
-//    }
-//
-//
+    @Autowired
+    BlogPostService blogPostService;
+
+    @GetMapping
+    public Page<BlogPost> getBlogPost() {
+        return blogPostService.getBlogPost();
+    }
+
+
 //    @GetMapping("/{id}")
 //    public BlogPost findBlogPostById(@PathVariable long id) {
 //        return blogPostService.findBlogPostById(id);
 //    }
 //
-//
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public BlogPost saveBlogPost(@RequestBody BlogPost newBlogPost) {
-//        return blogPostService.addBlogPost(newBlogPost);
-//    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public BlogPost saveBlogPost(@RequestBody BlogPostPayload newBlogPost) {
+        return blogPostService.save(newBlogPost);
+    }
 //
 //
 //    @PutMapping("/{id}")

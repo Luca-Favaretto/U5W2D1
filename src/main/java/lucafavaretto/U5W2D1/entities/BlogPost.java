@@ -11,11 +11,12 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @ToString
-@AllArgsConstructor
+
 @Entity
 @Table(name = "blog_post")
 public class BlogPost {
     @Id
+    @Setter(AccessLevel.NONE)
     @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -25,6 +26,16 @@ public class BlogPost {
     private String details;
     @Column(name = "time_of_lecture")
     private int timeOfLecture;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
-
+    public BlogPost(Genre genre, String title, String cover, String details, int timeOfLecture, Author author) {
+        this.genre = genre;
+        this.title = title;
+        this.cover = cover;
+        this.details = details;
+        this.timeOfLecture = timeOfLecture;
+        this.author = author;
+    }
 }
