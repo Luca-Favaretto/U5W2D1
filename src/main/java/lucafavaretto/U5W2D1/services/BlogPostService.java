@@ -40,10 +40,10 @@ public class BlogPostService {
     }
 
     public BlogPost save(BlogPostPayload payload) {
-        if (authorsDao.existsById(payload.getAuthorId())) throw new BadRequestException("Author don't exist");
+        if (!authorsDao.existsById(payload.getAuthorId())) throw new BadRequestException("Author don't exist");
         Author author = authorService.findById(payload.getAuthorId());
         return blogPostDao.save(
-                new BlogPost(Genre.COMPUTER, payload.getTitle(), "https://picsum.photos/200/300", payload.getDetails(), payload.getTimeOfLecture(), author));
+                new BlogPost(Genre.valueOf(String.valueOf(payload.getGenre())), payload.getTitle(), "https://picsum.photos/200/300", payload.getDetails(), payload.getTimeOfLecture(), author));
     }
 
     public BlogPost findByIdAndUpdate(UUID id, BlogPost updateBlogPost) {

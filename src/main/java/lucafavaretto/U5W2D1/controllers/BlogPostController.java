@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/blogPosts")
@@ -23,11 +24,11 @@ public class BlogPostController {
         return blogPostService.getBlogPost();
     }
 
-//
-//    @GetMapping("/{id}")
-//    public BlogPost findBlogPostById(@PathVariable long id) {
-//        return blogPostService.findBlogPostById(id);
-//    }
+
+    @GetMapping("/{id}")
+    public BlogPost findBlogPostById(@PathVariable UUID id) {
+        return blogPostService.findById(id);
+    }
 
 
     @PostMapping
@@ -36,15 +37,15 @@ public class BlogPostController {
         return blogPostService.save(newBlogPost);
     }
 
-//    @PutMapping("/{id}")
-//    public BlogPost findBlogPostByIdAndUpdate(@PathVariable long id, @RequestBody BlogPost newBlogPost) {
-//        return blogPostService.findBlogPostByIdAndUpdate(id, newBlogPost);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void deleteBlogPostById(@PathVariable long id) {
-//        blogPostService.deleteBlogPostById(id);
-//    }
+    @PutMapping("/{id}")
+    public BlogPost findByIdAndUpdate(@PathVariable UUID id, @RequestBody BlogPost newBlogPost) {
+        return blogPostService.findByIdAndUpdate(id, newBlogPost);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBlogPostById(@PathVariable UUID id) {
+        blogPostService.deleteBlogPostById(id);
+    }
 
 }
