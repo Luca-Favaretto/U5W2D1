@@ -2,63 +2,59 @@ package lucafavaretto.U5W2D1.services;
 
 import lucafavaretto.U5W2D1.entities.Author;
 
-import lucafavaretto.U5W2D1.exeptions.NotFoundElement;
+import lucafavaretto.U5W2D1.exeptions.BadRequestException;
+import lucafavaretto.U5W2D1.exeptions.NotFoundException;
+import lucafavaretto.U5W2D1.repositories.AuthorsDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 @Service
 
 public class AuthorService {
-    Set<Author> authors = new HashSet<>();
 
-    public Set<Author> getAuthors() {
-        return authors;
+    @Autowired
+    AuthorsDao authorsDao;
+
+    public Page<Author> getAuthors(int pageNumber, int pageSize, String orderBy) {
+        if (pageNumber > 20) pageSize = 20;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(orderBy));
+        return authorsDao.findAll(pageable);
     }
 
-    public Author findBlogPostById(long id) {
-        return authors.stream()
-                .filter(el -> el.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new NotFoundElement(id));
+    public Author findById(UUID id) {
+        return authorsDao.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Author addAuthor(Author newAuthor) {
-        Random rndm = new Random();
-        newAuthor.setId(rndm.nextInt(1, 10000));
-        newAuthor.setAvatar("https://ui-avatars.com/api/?name=" + newAuthor.getName() + "+" + newAuthor.getSurname());
-        authors.add(newAuthor);
-
-        return newAuthor;
+    public Author save(Author newAuthor) {
+        if (authorsDao.existsByEmail(newAuthor.getEmail())) throw new BadRequestException("email already exist");
+        newAuthor.setAvatar(generateAvatarUrl(newAuthor));
+        return authorsDao.save(newAuthor);
     }
 
-    public Author findAuthorByIdAndUpdate(long id, Author updatePost) {
-        return authors.stream()
-                .filter(el -> el.getId() == id)
-                .findFirst()
-                .map(currentAuthor -> {
-                    currentAuthor.setName(updatePost.getName());
-                    currentAuthor.setSurname(updatePost.getSurname());
-                    currentAuthor.setMail(updatePost.getMail());
-                    currentAuthor.setBirthdayDate(updatePost.getBirthdayDate());
-                    currentAuthor.setAvatar("https://ui-avatars.com/api/?name=" + updatePost.getName() + "+" + updatePost.getSurname());
-                    return currentAuthor;
-                })
-                .orElseThrow(() -> new NotFoundElement(id));
+    public Author findByIdAndUpdate(UUID id, Author updatePost) {
+        Author found = findById(id);
+        found.setName(updatePost.getName());
+        found.setSurname(updatePost.getSurname());
+        found.setEmail(updatePost.getEmail());
+        found.setBirthdayDate(updatePost.getBirthdayDate());
+        found.setAvatar(generateAvatarUrl(updatePost));
+        return authorsDao.save(found);
     }
 
-    public void deleteAuthorById(long id) {
-//        Iterator<Author> iterator = authors.iterator();
-//        while (iterator.hasNext()) {
-//            Author current = iterator.next();
-//            if (current.getId() == id) {
-//                iterator.remove();
-//            }
-//        }
-        authors.removeIf(current -> current.getId() == id);
+
+    public void deleteAuthorById(UUID id) {
+        Author found = findById(id);
+        authorsDao.delete(found);
+    }
+
+    private String generateAvatarUrl(Author author) {
+        return "https://ui-avatars.com/api/?name=" + author.getName() + "+" + author.getSurname();
     }
 
 }
