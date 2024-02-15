@@ -20,12 +20,16 @@ public class BlogPost {
     @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
+
+
     private Genre genre;
     private String title;
     private String cover;
     private String details;
     @Column(name = "time_of_lecture")
     private int timeOfLecture;
+
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;

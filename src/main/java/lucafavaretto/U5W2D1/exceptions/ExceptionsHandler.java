@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionsHandler {
@@ -13,7 +14,15 @@ public class ExceptionsHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
     public ErrorsPayload handleBadRequest(BadRequestException ex) {
-        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
+        if (ex.getErrorsList() != null) {
+
+            List<String> errorsList = ex.getErrorsList().stream().map(objectError -> objectError.getDefaultMessage()).toList();
+
+            return new ErrorsPayloadWithList(ex.getMessage(), LocalDateTime.now(), errorsList);
+        } else {
+            return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
+        }
+
     }
 
 

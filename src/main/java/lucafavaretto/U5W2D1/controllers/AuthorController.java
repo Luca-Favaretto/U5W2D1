@@ -30,6 +30,7 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     public Author findAuthorById(@PathVariable UUID id) {
+
         return authorService.findById(id);
     }
 
@@ -37,6 +38,7 @@ public class AuthorController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Author saveAuthor(@RequestBody Author newAuthor) {
+
         return authorService.save(newAuthor);
     }
 

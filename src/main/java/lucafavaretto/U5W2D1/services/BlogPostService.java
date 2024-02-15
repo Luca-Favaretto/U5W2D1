@@ -4,7 +4,8 @@ import lucafavaretto.U5W2D1.Genre;
 import lucafavaretto.U5W2D1.entities.Author;
 import lucafavaretto.U5W2D1.entities.BlogPost;
 import lucafavaretto.U5W2D1.exceptions.NotFoundException;
-import lucafavaretto.U5W2D1.payloads.BlogPostPayload;
+import lucafavaretto.U5W2D1.payloads.BlogPostDTO;
+
 import lucafavaretto.U5W2D1.repositories.AuthorsDao;
 import lucafavaretto.U5W2D1.repositories.BlogPostDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,7 @@ public class BlogPostService {
 
     @Autowired
     BlogPostDao blogPostDao;
-    @Autowired
-    AuthorsDao authorsDao;
+
 
     @Autowired
     AuthorService authorService;
@@ -38,20 +38,24 @@ public class BlogPostService {
         return blogPostDao.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public BlogPost save(BlogPostPayload payload) {
-        Author author = authorService.findById(payload.getAuthorId());
+    public BlogPost save(BlogPostDTO payload) {
+
+        Author author = authorService.findById(payload.authorId());
+
         return blogPostDao.save(
-                new BlogPost(Genre.valueOf(String.valueOf(payload.getGenre())), payload.getTitle(),
-                        "https://picsum.photos/200/300", payload.getDetails(), payload.getTimeOfLecture(), author));
+                new BlogPost(Genre.valueOf(String.valueOf(payload.genre())), payload.title(),
+                        "https://picsum.photos/200/300", payload.details(), payload.timeOfLecture(), author));
+
+
     }
 
-    public BlogPost findByIdAndUpdate(UUID id, BlogPost updateBlogPost) {
+    public BlogPost findByIdAndUpdate(UUID id, BlogPostDTO updateBlogPost) {
         BlogPost found = findById(id);
-        found.setGenre(updateBlogPost.getGenre());
-        found.setTitle(updateBlogPost.getTitle());
-        found.setCover(updateBlogPost.getCover());
-        found.setDetails(updateBlogPost.getDetails());
-        found.setTimeOfLecture(updateBlogPost.getTimeOfLecture());
+        found.setGenre(updateBlogPost.genre());
+        found.setTitle(updateBlogPost.title());
+        found.setCover("https://picsum.photos/200/300");
+        found.setDetails(updateBlogPost.details());
+        found.setTimeOfLecture(updateBlogPost.timeOfLecture());
         return blogPostDao.save(found);
     }
 

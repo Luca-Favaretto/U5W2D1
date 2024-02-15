@@ -25,6 +25,8 @@ public class Author {
     private UUID id;
     private String name;
     private String surname;
+
+    @Column(nullable = false)
     private String email;
     private LocalDate birthdayDate;
     private String avatar;
