@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -52,6 +54,11 @@ public class BlogPostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBlogPostById(@PathVariable UUID id) {
         blogPostService.deleteBlogPostById(id);
+    }
+
+    @PostMapping("/upload")
+    public String uploadAvatar(@RequestParam("avatar") MultipartFile image) throws IOException {
+        return this.blogPostService.uploadImage(image);
     }
 
 }

@@ -1,5 +1,7 @@
 package lucafavaretto.U5W2D1.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lucafavaretto.U5W2D1.Genre;
 import lucafavaretto.U5W2D1.entities.Author;
 import lucafavaretto.U5W2D1.entities.BlogPost;
@@ -14,7 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -26,6 +30,8 @@ public class BlogPostService {
 
     @Autowired
     AuthorService authorService;
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     public Page<BlogPost> getBlogPost(int pageNumber, int pageSize, String orderBy) {
         if (pageNumber > 20) pageSize = 20;
@@ -40,7 +46,7 @@ public class BlogPostService {
 
     public BlogPost save(BlogPostDTO payload) {
 
-        Author author = authorService.findById(payload.authorId());
+        Author author = authorService.findById(UUID.fromString(payload.authorId()));
 
         return blogPostDao.save(
                 new BlogPost(Genre.valueOf(String.valueOf(payload.genre())), payload.title(),
@@ -62,6 +68,14 @@ public class BlogPostService {
     public void deleteBlogPostById(UUID id) {
         BlogPost found = findById(id);
         blogPostDao.delete(found);
+    }
+
+    public String uploadImage(MultipartFile image) throws IOException {
+
+        String url = (String) cloudinaryUploader.uploader().upload(image.getBytes(),
+                ObjectUtils.emptyMap()).get("url");
+
+        return url;
     }
 
 
