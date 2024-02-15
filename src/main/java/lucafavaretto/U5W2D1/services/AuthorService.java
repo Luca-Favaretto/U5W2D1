@@ -2,9 +2,10 @@ package lucafavaretto.U5W2D1.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import lucafavaretto.U5W2D1.configuration.EmailSender;
 import lucafavaretto.U5W2D1.entities.Author;
 
-import lucafavaretto.U5W2D1.entities.BlogPost;
+
 import lucafavaretto.U5W2D1.exceptions.BadRequestException;
 import lucafavaretto.U5W2D1.exceptions.NotFoundException;
 import lucafavaretto.U5W2D1.payloads.AuthorTDO;
@@ -29,6 +30,8 @@ public class AuthorService {
 
     @Autowired
     Cloudinary cloudinaryUploader;
+    @Autowired
+    EmailSender emailSender;
 
     public Page<Author> getAuthors(int pageNumber, int pageSize, String orderBy) {
         if (pageNumber > 20) pageSize = 20;
@@ -44,9 +47,10 @@ public class AuthorService {
         return authorsDao.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Author save(AuthorTDO authorTDO) {
+    public Author save(AuthorTDO authorTDO) throws IOException {
         if (authorsDao.existsByEmail(authorTDO.email())) throw new BadRequestException("email already exist");
         Author author = new Author(authorTDO.name(), authorTDO.surname(), authorTDO.email(), authorTDO.birthdayDate(), generateAvatarUrl(authorTDO));
+        emailSender.sendRegistrationEmail(author.getEmail());
         return authorsDao.save(author);
     }
 

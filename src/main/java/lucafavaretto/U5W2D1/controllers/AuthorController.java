@@ -42,7 +42,7 @@ public class AuthorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Author saveAuthor(@RequestBody AuthorTDO newAuthor, BindingResult validation) {
+    public Author saveAuthor(@RequestBody AuthorTDO newAuthor, BindingResult validation) throws IOException {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }

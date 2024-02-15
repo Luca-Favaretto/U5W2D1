@@ -1,6 +1,7 @@
 package lucafavaretto.U5W2D1.configuration;
 
 import com.cloudinary.Cloudinary;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,4 +26,5 @@ public class ServerConfig {
 
         return new Cloudinary(config);
     }
+
 }
