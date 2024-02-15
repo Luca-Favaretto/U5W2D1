@@ -3,9 +3,7 @@ package lucafavaretto.U5W2D1.payloads;
 import jakarta.validation.constraints.*;
 import lucafavaretto.U5W2D1.Genre;
 
-import java.util.UUID;
-
-public record BlogPostDTO(
+public record BlogPostTDO(
 
 
         Genre genre,
@@ -26,6 +24,4 @@ public record BlogPostDTO(
         String authorId
 
 ) {
-
-
 }

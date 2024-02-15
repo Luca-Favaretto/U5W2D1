@@ -6,9 +6,8 @@ import lucafavaretto.U5W2D1.Genre;
 import lucafavaretto.U5W2D1.entities.Author;
 import lucafavaretto.U5W2D1.entities.BlogPost;
 import lucafavaretto.U5W2D1.exceptions.NotFoundException;
-import lucafavaretto.U5W2D1.payloads.BlogPostDTO;
+import lucafavaretto.U5W2D1.payloads.BlogPostTDO;
 
-import lucafavaretto.U5W2D1.repositories.AuthorsDao;
 import lucafavaretto.U5W2D1.repositories.BlogPostDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +43,7 @@ public class BlogPostService {
         return blogPostDao.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public BlogPost save(BlogPostDTO payload) {
+    public BlogPost save(BlogPostTDO payload) {
 
         Author author = authorService.findById(UUID.fromString(payload.authorId()));
 
@@ -55,11 +54,10 @@ public class BlogPostService {
 
     }
 
-    public BlogPost findByIdAndUpdate(UUID id, BlogPostDTO updateBlogPost) {
+    public BlogPost findByIdAndUpdate(UUID id, BlogPostTDO updateBlogPost) {
         BlogPost found = findById(id);
         found.setGenre(updateBlogPost.genre());
         found.setTitle(updateBlogPost.title());
-        found.setCover("https://picsum.photos/200/300");
         found.setDetails(updateBlogPost.details());
         found.setTimeOfLecture(updateBlogPost.timeOfLecture());
         return blogPostDao.save(found);
@@ -70,11 +68,12 @@ public class BlogPostService {
         blogPostDao.delete(found);
     }
 
-    public String uploadImage(MultipartFile image) throws IOException {
-
+    public String uploadImage(UUID id, MultipartFile image) throws IOException {
+        BlogPost found = findById(id);
         String url = (String) cloudinaryUploader.uploader().upload(image.getBytes(),
                 ObjectUtils.emptyMap()).get("url");
-
+        found.setCover(url);
+        blogPostDao.save(found);
         return url;
     }
 

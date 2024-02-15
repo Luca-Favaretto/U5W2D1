@@ -2,7 +2,7 @@ package lucafavaretto.U5W2D1.controllers;
 
 import lucafavaretto.U5W2D1.entities.BlogPost;
 import lucafavaretto.U5W2D1.exceptions.BadRequestException;
-import lucafavaretto.U5W2D1.payloads.BlogPostDTO;
+import lucafavaretto.U5W2D1.payloads.BlogPostTDO;
 import lucafavaretto.U5W2D1.services.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,7 +37,7 @@ public class BlogPostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BlogPost saveBlogPost(@RequestBody @Validated BlogPostDTO newBlogPost, BindingResult validation) {
+    public BlogPost saveBlogPost(@RequestBody @Validated BlogPostTDO newBlogPost, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
@@ -46,7 +46,10 @@ public class BlogPostController {
     }
 
     @PutMapping("/{id}")
-    public BlogPost findByIdAndUpdate(@PathVariable UUID id, @RequestBody @Validated BlogPostDTO newBlogPost) {
+    public BlogPost findByIdAndUpdate(@PathVariable UUID id, @RequestBody @Validated BlogPostTDO newBlogPost, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return blogPostService.findByIdAndUpdate(id, newBlogPost);
     }
 
@@ -56,9 +59,11 @@ public class BlogPostController {
         blogPostService.deleteBlogPostById(id);
     }
 
-    @PostMapping("/upload")
-    public String uploadAvatar(@RequestParam("avatar") MultipartFile image) throws IOException {
-        return this.blogPostService.uploadImage(image);
+    @PatchMapping("/{id}/upload")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String uploadAvatar(@PathVariable UUID id, @RequestParam("avatar") MultipartFile image) throws IOException {
+        return this.blogPostService.uploadImage(id, image);
     }
+
 
 }
